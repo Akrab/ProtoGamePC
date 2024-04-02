@@ -14,6 +14,8 @@ namespace ProtoGame.Infrastructure.Installers
         [SerializeField] private ScriptableObject[] _containers;
         [SerializeField] private InputController _inputController;
 
+        [SerializeField] private CoroutineRunner _coroutineRunner;
+
         private void InstallECS()
         {
             var world = new EcsWorld();
@@ -26,6 +28,8 @@ namespace ProtoGame.Infrastructure.Installers
             Container.BindInterfacesAndSelfTo<PromoService>().FromNew().AsSingle().NonLazy();
             Container.BindInterfacesAndSelfTo<RarityService>().FromNew().AsSingle().NonLazy();
             Container.BindInterfacesAndSelfTo<UserService>().FromNew().AsSingle().NonLazy();
+            Container.BindInterfacesAndSelfTo<ResourseService>().FromNew().AsSingle().NonLazy();
+            
         }
 
         private void InstallControllers()
@@ -39,6 +43,7 @@ namespace ProtoGame.Infrastructure.Installers
             var gStateMachine = new GameStateMachine();
             Container.BindInterfacesTo<GameStateMachine>().FromInstance(gStateMachine).AsSingle().NonLazy();
 
+            gStateMachine.AddState(Container.Instantiate<GameGState>());
             gStateMachine.AddState(Container.Instantiate<LoadingGState>());
             gStateMachine.AddState(Container.Instantiate<MainMenuGState>());
             gStateMachine.AddState(Container.Instantiate<PromoMenuGState>());
@@ -61,13 +66,15 @@ namespace ProtoGame.Infrastructure.Installers
         {
             Container.Bind<ConfigContainer>().FromNew().AsSingle().NonLazy();
             Container.BindInterfacesAndSelfTo<UIContainer>().AsSingle().NonLazy();
+            Container.BindInterfacesAndSelfTo<CoroutineRunner>().FromInstance(_coroutineRunner).AsSingle().NonLazy();
+            
             InstallECS();
-            InstallGameStateMachine();
             InstallContainers();
             InstallServices();
             InstallControllers();
+            InstallGameStateMachine();
             Container.BindInterfacesAndSelfTo<ProjectInstaller>().FromInstance(this).AsSingle();
-
+      
         }
 
         public void Initialize()

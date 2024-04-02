@@ -13,7 +13,7 @@ namespace ProtoGame
         private const string ACTION_MOVE_MODE = "MoveMode";
 
         //Пресесть/подкрадываться
-        private const string ACTION_CREEP_MODE = "CreepMode";
+        private const string ACTION_CREEP_MODE = "СreepMode";
         [Inject] private EcsWorld _ecsWorld;
 
 
