@@ -11,7 +11,8 @@ namespace ProtoGame.Infrastructure.Installers
 {
     public class ProjectInstaller : MonoInstaller<ProjectInstaller>, IInitializable
     {
-        [SerializeField] private ScriptableObject[] containers;
+        [SerializeField] private ScriptableObject[] _containers;
+        [SerializeField] private InputController _inputController;
 
         private void InstallECS()
         {
@@ -25,6 +26,12 @@ namespace ProtoGame.Infrastructure.Installers
             Container.BindInterfacesAndSelfTo<PromoService>().FromNew().AsSingle().NonLazy();
             Container.BindInterfacesAndSelfTo<RarityService>().FromNew().AsSingle().NonLazy();
             Container.BindInterfacesAndSelfTo<UserService>().FromNew().AsSingle().NonLazy();
+        }
+
+        private void InstallControllers()
+        {
+            Container.BindInterfacesAndSelfTo<InputController>().FromInstance(_inputController).AsSingle().NonLazy();
+            
         }
 
         private void InstallGameStateMachine()
@@ -41,7 +48,7 @@ namespace ProtoGame.Infrastructure.Installers
         {
 
             var cc = Container.Resolve<ConfigContainer>();
-            foreach (var container in containers)
+            foreach (var container in _containers)
                 cc.Add(container);
 
         }
@@ -58,6 +65,7 @@ namespace ProtoGame.Infrastructure.Installers
             InstallGameStateMachine();
             InstallContainers();
             InstallServices();
+            InstallControllers();
             Container.BindInterfacesAndSelfTo<ProjectInstaller>().FromInstance(this).AsSingle();
 
         }

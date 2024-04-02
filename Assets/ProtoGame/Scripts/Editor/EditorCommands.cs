@@ -33,5 +33,13 @@ namespace ProtoGame.Editor
             EditorApplication.isPlaying = false;
         }
 
+        [MenuItem("ProtoGame/Load Game")]
+        private static void LoadGame()
+        {
+            EditorSceneManager.OpenScene("Assets/ProtoGame/Scenes/Game.unity");
+            EditorApplication.isPlaying = false;
+        }
+
+
     }
 }

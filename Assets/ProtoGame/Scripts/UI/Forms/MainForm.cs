@@ -18,7 +18,7 @@ namespace ProtoGame.UI
 
         private void ButtonStartClick()
         {
-            _gameStateMachine.EnterToState<PromoMenuGState>();
+            _gameStateMachine.EnterToState<GameGState>();
         }
     }
 }

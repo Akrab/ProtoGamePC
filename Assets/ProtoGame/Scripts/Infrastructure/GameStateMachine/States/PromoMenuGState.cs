@@ -4,7 +4,7 @@ using Zenject;
 
 namespace ProtoGame.Infrastructure.States
 {
-    internal class PromoMenuGState : IGState
+    public class PromoMenuGState : IGState
     {
         [Inject] private readonly UIContainer _uiContainer;
         public void Enter(object data = null)
