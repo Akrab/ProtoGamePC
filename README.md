@@ -1,13 +1,25 @@
 # ProtoGame
-Будущий прототип игры.
-Реализовано Promo menu как пример.
+Будущий прототип игры.</br>
+ </br>
+Используемые технологии: <b> Zenject, LeoECS, Promise, Input System.</b> </br>
+Для быстрого прототипирования сцены используется asset ProBuilder. </br>
+ </br>
+Реализовано: </br>
+<ul>
+ <li> Базовая архитектура проекта. </li>
+ <li>Движение героя.</li>
+ <li> Спавн Ботов.</li>
+</ul>
+ 
+При запуске окно с кнопкой:
+![image](https://github.com/Akrab/ProtoGamePC/assets/7695655/a6810940-1b9b-4e81-ac0a-dba3bc6e62ea)
 
-При запуске появляется окно с кнопкой.
+Тестовая сцена:
+![image](https://github.com/Akrab/ProtoGamePC/assets/7695655/3bb6f7d9-ec6c-4d89-8e70-e0775d2355b0)
 
-![image](https://github.com/Akrab/ProtoGame/assets/7695655/fd8de6c4-06f9-45c4-9368-6b35a7b74aaa)
+Стартовая сцена Lobby либо через кнопку:
 
-Второе окно с выбором товаров. При покупке списывается валюта и пишется в лог.
+![image](https://github.com/Akrab/ProtoGamePC/assets/7695655/701c3b54-317f-4628-8d70-ddc3c40ade74)
 
-![image](https://github.com/Akrab/ProtoGame/assets/7695655/195126e8-d958-41d5-93cc-3476af9c26b9)
 
  
