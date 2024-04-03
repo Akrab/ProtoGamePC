@@ -1,5 +1,8 @@
+using Leopotam.EcsLite;
 using ProtoGame.Game.Actor.Player;
+using ProtoGame.Game.ECS;
 using ProtoGame.Game.World;
+using ProtoGame.Infrastructure.Controllers;
 using RSG;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -9,17 +12,22 @@ namespace ProtoGame.Infrastructure.States
 {
     public class GameGState : IGState
     {
-
+        [Inject] private EcsWorld _ecsWorld;
         [Inject] private IResourseService _resourseService;
-
         [Inject] private ICoroutineRunner _coroutineRunner;
+        [Inject] private IEcsController _ecsController;
+
         public void Enter(object data = null)
         {
             var waitPromise = new Promise();
             waitPromise
                 .Then(LoadScene)
                 .Then(PrepareScene)
-                .Done(() => { }, Er => { Debug.LogError(Er); });
+                .Done(() =>
+                {
+
+                    _ecsController.IsRunGame = true;
+                }, Er => { Debug.LogError(Er); });
 
             waitPromise.Resolve();
         }
@@ -67,7 +75,21 @@ namespace ProtoGame.Infrastructure.States
                     var point = sceneInitManager.GetPlayerSpawnPoint;
                     var playerInstance = Object.Instantiate(player, point.transform.position, point.transform.rotation).GetComponent<PlayerView>();
                     return playerInstance;
-                }).Done(); 
+                })
+                .Then(playerInstance =>
+                {
+                    sceneInitManager.GameCameraSmooth.SetTarget(playerInstance.transform, new Vector3(-32, 25,- 32));
+
+                    return playerInstance;
+                })
+                .Then(playerInstance =>
+                {
+                    int entity = _ecsWorld.NewEntity();
+                    EcsPool<EPlayerComp> pool = _ecsWorld.GetPool<EPlayerComp>();
+                    ref EPlayerComp plComp = ref pool.Add(entity);
+                    plComp.playerView = playerInstance;
+                })
+                .Done(); 
             promise.Resolve();
             return promise;
 

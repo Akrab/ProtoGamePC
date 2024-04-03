@@ -1,21 +1,25 @@
-using System.Collections;
-using System.Collections.Generic;
+using Leopotam.EcsLite;
+using ProtoGame.Assets.ProtoGame.Scripts.Game;
+using ProtoGame.Game.Infrastructure;
 using UnityEngine;
 
 namespace ProtoGame.Game.Actor
 {
-    public class BaseActorObj : MonoBehaviour
+    public abstract class BaseActorObj : BaseMonoBehaviour, IEntitySet
     {
-        // Start is called before the first frame update
-        void Start()
+        protected Rigidbody _rigidbody;
+        protected EcsWorld _ecsWorld;
+        protected override void SetupMB()
         {
-        
+            _rigidbody = GetComponent<Rigidbody>(); 
         }
 
-        // Update is called once per frame
-        void Update()
+        public void SetWorld(EcsWorld ecsWorld)
         {
-        
+            _ecsWorld = ecsWorld;
         }
+
+
+        protected abstract void SetComps();
     }
 }

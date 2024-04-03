@@ -1,10 +1,18 @@
 ﻿using Leopotam.EcsLite;
+using ProtoGame.Game.ECS;
 using System;
 using Zenject;
 
 namespace ProtoGame.Infrastructure.Controllers
 {
-    public class EcsController : ITickable, IInitializable, IDisposable
+
+    public interface IEcsController
+    {
+        public bool IsInit { get; }
+        public bool IsRunGame { get; set; }
+    }
+
+    public class EcsController : ITickable, IInitializable, IDisposable, IEcsController
     {
 
         [Inject] private readonly EcsWorld _ecsWorld;
@@ -12,7 +20,7 @@ namespace ProtoGame.Infrastructure.Controllers
 
         private EcsSystems _updateSystem;
 
-        public bool IsInit { get;  set; }
+        public bool IsInit { get; private set; }
         public bool IsRunGame { get; set; }
         public void Dispose()
         {
@@ -31,7 +39,12 @@ namespace ProtoGame.Infrastructure.Controllers
             // Регистрируем отладочные системы по контролю за текущей группой систем. 
             _updateSystem.Add(new Leopotam.EcsLite.UnityEditor.EcsSystemsDebugSystem());
 #endif
-          //  _updateSystem.Inject();
+
+            _updateSystem.Add(_container.Instantiate<EscMovePlayerSys>());
+            _updateSystem.Add(_container.Instantiate<EcsMoveSpeedPlayerSys>());
+            _updateSystem.Add(_container.Instantiate<EcsMoveCreepPlayerSys>());
+            
+            //  _updateSystem.Inject();
             _updateSystem.Init();
             IsInit = true;
         }

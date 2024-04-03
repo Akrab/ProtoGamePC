@@ -4,18 +4,11 @@ using UnityEngine;
 
 namespace ProtoGame.Game.Actor
 {
-    public class MoveObj : MonoBehaviour
+    public class MoveObj : BaseActorObj
     {
-        // Start is called before the first frame update
-        void Start()
+        protected override void SetComps()
         {
-        
-        }
 
-        // Update is called once per frame
-        void Update()
-        {
-        
         }
     }
 }

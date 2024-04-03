@@ -10,6 +10,8 @@ namespace ProtoGame.Game.World
         void Setup();
         PlayerSpawnerPoint GetPlayerSpawnPoint { get; }
         IReadOnlyCollection<EnemySpawnerPoint> GetEnemySpawnerPoints { get; }
+        SmoothCameraFollow GameCameraSmooth {  get; }
+
     }
 
     public class SceneInitManager: BaseMonoBehaviour, ISceneInitManager
@@ -17,9 +19,13 @@ namespace ProtoGame.Game.World
         [SerializeField] private EnemySpawnersContainer _enemySpawnersContainer;
         [SerializeField] private PlayerSpawnerPoint _playerSpawnerPoint;
 
+        [SerializeField] private SmoothCameraFollow _gameCameraSmooth;
+
         public PlayerSpawnerPoint GetPlayerSpawnPoint => _playerSpawnerPoint;
 
         public IReadOnlyCollection<EnemySpawnerPoint> GetEnemySpawnerPoints => _enemySpawnersContainer.Points;
+
+        public SmoothCameraFollow GameCameraSmooth => _gameCameraSmooth;
 
         protected override void SetupMB()
         {
