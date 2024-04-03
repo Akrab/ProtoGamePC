@@ -1,16 +1,16 @@
 using UnityEngine;
 
-namespace ProtoGame.Game.Actor
+namespace ProtoGame.Game.Actor.Enemy
 {
     public class ScannerObj : MonoBehaviour
     {
         [SerializeField] private Transform _rayPoint;
-
         private void OnTriggerEnter(Collider other)
         {
             if(other.tag == "Player")
             {
-                Debug.LogError("Maybe I See the player", gameObject);
+                Debug.LogError("I see");
+
             }
         }
 
@@ -18,7 +18,7 @@ namespace ProtoGame.Game.Actor
         {
             if (other.tag == "Player")
             {
-                Debug.LogError("I Don't see the player", gameObject);
+
             }
         }
     }

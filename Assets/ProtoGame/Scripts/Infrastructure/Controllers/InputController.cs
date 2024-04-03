@@ -17,6 +17,9 @@ namespace ProtoGame
 
         //Присесть/подкрадываться
         private const string ACTION_CREEP_MODE = "СreepMode";
+
+        private const string ACTION_FIRE = "Fire";
+
         [Inject] private EcsWorld _ecsWorld;
         [Inject] private IEcsController _ecsController;
 
@@ -24,9 +27,12 @@ namespace ProtoGame
 
         private EcsFilter _playerFilder;
         private EcsPool<EPlayerComp> _playerPool;
-        private EcsPool<EInputMoveComp> _movePool;
-        private EcsPool<EInputCreepComp> _creepPool;
-        private EcsPool<EInputSpeedMoveComp> _speedPool;
+        private EcsPool<EInputMoveEvent> _movePool;
+        private EcsPool<EInputCreepEvent> _creepPool;
+        private EcsPool<EInputSpeedMoveEvent> _speedPool;
+
+        private EcsPool<EPlayerFireEvent> _fireEvent;
+
         [Inject]
         private void Initialize()
         {
@@ -48,10 +54,16 @@ namespace ProtoGame
             modeCreepMode.performed += InputCreepMode;
             modeCreepMode.canceled += InputCreepModeCanceled;
 
-            _movePool = _ecsWorld.GetPool<EInputMoveComp>();
-            _creepPool = _ecsWorld.GetPool<EInputCreepComp>();
-            _speedPool = _ecsWorld.GetPool<EInputSpeedMoveComp>();
 
+            var fireAction = mp.FindAction(ACTION_FIRE);
+
+            fireAction.performed += FireAction;
+            fireAction.canceled += FireAction;
+
+            _movePool = _ecsWorld.GetPool<EInputMoveEvent>();
+            _creepPool = _ecsWorld.GetPool<EInputCreepEvent>();
+            _speedPool = _ecsWorld.GetPool<EInputSpeedMoveEvent>();
+            _fireEvent = _ecsWorld.GetPool<EPlayerFireEvent>();
 
             _playerFilder = _ecsWorld.Filter<EPlayerComp>().End();
         }
@@ -155,6 +167,32 @@ namespace ProtoGame
                 {
                     ref var e1 = ref _creepPool.Add(entity);
                     e1.isCreep = isCreep;
+                }
+
+            }
+        }
+
+
+        private void FireAction(InputAction.CallbackContext context)
+        {
+            if (_ecsController.IsRunGame == false)
+                return;
+            SetFire(true);
+        }
+
+        private void SetFire(bool isFire)
+        {
+            foreach (var entity in _playerFilder)
+            {
+                if (_fireEvent.Has(entity))
+                {
+                    ref var e1 = ref _fireEvent.Get(entity);
+                    e1.isFire = isFire;
+                }
+                else
+                {
+                    ref var e1 = ref _fireEvent.Add(entity);
+                    e1.isFire = isFire;
                 }
 
             }

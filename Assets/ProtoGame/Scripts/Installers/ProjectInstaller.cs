@@ -1,8 +1,11 @@
 using Leopotam.EcsLite;
+using ProtoGame.Game.Actor.Enemy;
 using ProtoGame.Infrastructure.Containers;
 using ProtoGame.Infrastructure.Controllers;
+using ProtoGame.Infrastructure.Factory;
 using ProtoGame.Infrastructure.States;
 using ProtoGame.Services;
+using RSG;
 using UnityEngine;
 using Zenject;
 
@@ -35,7 +38,6 @@ namespace ProtoGame.Infrastructure.Installers
         private void InstallControllers()
         {
             Container.BindInterfacesAndSelfTo<InputController>().FromInstance(_inputController).AsSingle().NonLazy();
-            
         }
 
         private void InstallGameStateMachine()
@@ -57,6 +59,14 @@ namespace ProtoGame.Infrastructure.Installers
                 cc.Add(container);
 
         }
+
+        private void InstallFabrics()
+        {
+            Container.BindFactory<Transform, IPromise<IEnemy>, EnemyFactory>().FromFactory<CustomEnemyFactory>().NonLazy();
+
+        }
+
+
         private void StartApp()
         {
             Container.Resolve<IGameStateMachine>().EnterToState<MainMenuGState>();
@@ -72,7 +82,9 @@ namespace ProtoGame.Infrastructure.Installers
             InstallContainers();
             InstallServices();
             InstallControllers();
+            InstallFabrics();
             InstallGameStateMachine();
+
             Container.BindInterfacesAndSelfTo<ProjectInstaller>().FromInstance(this).AsSingle();
       
         }

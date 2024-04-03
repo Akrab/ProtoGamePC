@@ -3,6 +3,7 @@ using ProtoGame.Game.Actor.Player;
 using ProtoGame.Game.ECS;
 using ProtoGame.Game.World;
 using ProtoGame.Infrastructure.Controllers;
+using ProtoGame.Infrastructure.Factory;
 using RSG;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -12,10 +13,12 @@ namespace ProtoGame.Infrastructure.States
 {
     public class GameGState : IGState
     {
+        [Inject] private DiContainer _di;
         [Inject] private EcsWorld _ecsWorld;
         [Inject] private IResourseService _resourseService;
         [Inject] private ICoroutineRunner _coroutineRunner;
         [Inject] private IEcsController _ecsController;
+        [Inject] private EnemyFactory _customEnemyFactory;
 
         public void Enter(object data = null)
         {
@@ -73,7 +76,9 @@ namespace ProtoGame.Infrastructure.States
                 .Then(player =>
                 {
                     var point = sceneInitManager.GetPlayerSpawnPoint;
+
                     var playerInstance = Object.Instantiate(player, point.transform.position, point.transform.rotation).GetComponent<PlayerView>();
+                    _di.Inject(playerInstance);
                     return playerInstance;
                 })
                 .Then(playerInstance =>
@@ -106,7 +111,9 @@ namespace ProtoGame.Infrastructure.States
 
                     foreach (var point in points)
                     {
-                       Object.Instantiate(enemy, point.transform.position, point.transform.rotation);
+                        var p = _customEnemyFactory.Create(point.transform);
+                        p.Then(enemy => {
+                        }).Done();
                     }
 
                     

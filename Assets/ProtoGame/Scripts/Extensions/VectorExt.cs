@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace ProtoGame.Assets.ProtoGame.Scripts.Extensions
+namespace ProtoGame.Extensions
 {
     public static class VectorExt
     {

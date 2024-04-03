@@ -9,13 +9,13 @@ namespace ProtoGame.Game.ECS
 
         private EcsFilter _filter;
         private EcsPool<EPlayerComp> _player;
-        private EcsPool<EInputCreepComp> _moveCreep;
+        private EcsPool<EInputCreepEvent> _moveCreep;
         public void Init(IEcsSystems systems)
         {
-            _filter = systems.GetWorld().Filter<EPlayerComp>().Inc<EInputCreepComp>().End();
+            _filter = systems.GetWorld().Filter<EPlayerComp>().Inc<EInputCreepEvent>().End();
 
             _player = systems.GetWorld().GetPool<EPlayerComp>();
-            _moveCreep = systems.GetWorld().GetPool<EInputCreepComp>();
+            _moveCreep = systems.GetWorld().GetPool<EInputCreepEvent>();
         }
 
         public void Run(IEcsSystems systems)

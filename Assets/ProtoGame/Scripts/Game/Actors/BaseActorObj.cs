@@ -9,6 +9,7 @@ namespace ProtoGame.Game.Actor
     {
         protected Rigidbody _rigidbody;
         protected EcsWorld _ecsWorld;
+        protected int _ecsIndex;
         protected override void SetupMB()
         {
             _rigidbody = GetComponent<Rigidbody>(); 
@@ -17,9 +18,13 @@ namespace ProtoGame.Game.Actor
         public void SetWorld(EcsWorld ecsWorld)
         {
             _ecsWorld = ecsWorld;
+
+            SetComps();
         }
 
 
         protected abstract void SetComps();
+
+
     }
 }

@@ -27,7 +27,7 @@ namespace ProtoGame.Game
             m_targetPostion = _target.position + _offset;
             if (m_targetPostion.y <= Y_Border)
                 m_targetPostion.y = Y_Border;
-            transform.position = Vector3.SmoothDamp(transform.position, m_targetPostion, ref m_currentVelocity, _smooth);
+            transform.position = Vector3.SmoothDamp(transform.position, m_targetPostion, ref m_currentVelocity, _smooth * Time.deltaTime);
 
         }
     }

@@ -9,6 +9,7 @@ namespace ProtoGame.Assets.ProtoGame.Scripts.Game
 {
     public interface IEntitySet
     {
+        void Setup();
         void SetWorld(EcsWorld ecsWorld);
     }
 }
