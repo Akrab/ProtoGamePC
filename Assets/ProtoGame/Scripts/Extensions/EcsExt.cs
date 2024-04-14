@@ -14,5 +14,6 @@ namespace ProtoGame.Extensions
         {
             return filter.GetEntitiesCount() == 0;
         }
+
     }
 }

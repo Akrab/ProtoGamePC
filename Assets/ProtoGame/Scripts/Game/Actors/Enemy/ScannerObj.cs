@@ -7,16 +7,15 @@ namespace ProtoGame.Game.Actor.Enemy
         [SerializeField] private Transform _rayPoint;
         private void OnTriggerEnter(Collider other)
         {
-            if(other.tag == "Player")
+            if(other.CompareTag(CONSTANTS.PLAYER_TAG))
             {
                 Debug.LogError("I see");
-
             }
         }
 
         private void OnTriggerExit(Collider other)
         {
-            if (other.tag == "Player")
+            if (other.CompareTag(CONSTANTS.PLAYER_TAG))
             {
 
             }

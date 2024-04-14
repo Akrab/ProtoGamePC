@@ -8,7 +8,7 @@ namespace ProtoGame.Game.World
     {
         private EnemySpawnerPoint[] _points;
         
-        public IReadOnlyCollection< EnemySpawnerPoint> Points=> _points;
+        public IReadOnlyCollection<EnemySpawnerPoint> Points=> _points;
         protected override void SetupMB()
         {
             _points = GetComponentsInChildren<EnemySpawnerPoint>();

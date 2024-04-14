@@ -1,6 +1,8 @@
-﻿using ProtoGame.Game.Infrastructure;
+﻿using Leopotam.EcsLite;
+using ProtoGame.Game.Infrastructure;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 namespace ProtoGame.Game.World
 {
@@ -20,6 +22,9 @@ namespace ProtoGame.Game.World
         [SerializeField] private PlayerSpawnerPoint _playerSpawnerPoint;
 
         [SerializeField] private SmoothCameraFollow _gameCameraSmooth;
+        [SerializeField] private FinishPoint _finishPoint;
+
+        [Inject] private EcsWorld _ecsWorld;
 
         public PlayerSpawnerPoint GetPlayerSpawnPoint => _playerSpawnerPoint;
 
@@ -27,10 +32,22 @@ namespace ProtoGame.Game.World
 
         public SmoothCameraFollow GameCameraSmooth => _gameCameraSmooth;
 
+        [Inject]
+        private void Initialize()
+        {
+            _finishPoint.Initialize(_ecsWorld);
+        }
+
+
         protected override void SetupMB()
         {
+
             _enemySpawnersContainer.Setup();
             _playerSpawnerPoint.Setup();
+
+
         }
+
+        
     }
 }

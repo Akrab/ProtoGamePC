@@ -43,7 +43,9 @@ namespace ProtoGame.Infrastructure.Controllers
             _updateSystem.Add(_container.Instantiate<EscMovePlayerSys>());
             _updateSystem.Add(_container.Instantiate<EcsMoveSpeedPlayerSys>());
             _updateSystem.Add(_container.Instantiate<EcsMoveCreepPlayerSys>());
-            
+            _updateSystem.Add(_container.Instantiate<EcsFinishPlayerSys>());
+
+           
             //  _updateSystem.Inject();
             _updateSystem.Init();
             IsInit = true;

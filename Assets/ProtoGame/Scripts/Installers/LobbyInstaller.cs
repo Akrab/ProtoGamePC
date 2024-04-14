@@ -11,4 +11,5 @@ namespace ProtoGame.Infrastructure.Installers
             _gameStateMachine.EnterToState<LoadingGState>();
         }
     }
+
 }

@@ -25,7 +25,7 @@ namespace ProtoGame
 
         private Vector3 _move = Vector3.zero;
 
-        private EcsFilter _playerFilder;
+        private EcsFilter _playerFilter;
         private EcsPool<EPlayerComp> _playerPool;
         private EcsPool<EInputMoveEvent> _movePool;
         private EcsPool<EInputCreepEvent> _creepPool;
@@ -65,7 +65,7 @@ namespace ProtoGame
             _speedPool = _ecsWorld.GetPool<EInputSpeedMoveEvent>();
             _fireEvent = _ecsWorld.GetPool<EPlayerFireEvent>();
 
-            _playerFilder = _ecsWorld.Filter<EPlayerComp>().End();
+            _playerFilter = _ecsWorld.Filter<EPlayerComp>().End();
         }
 
         private void InputMove(InputAction.CallbackContext context)
@@ -81,10 +81,10 @@ namespace ProtoGame
             _move.z = v.y;
 
 
-            if (_playerFilder.IsEmpty()) return;
+            if (_playerFilter.IsEmpty()) return;
 
 
-            foreach (var entity in _playerFilder)
+            foreach (var entity in _playerFilter)
             {
                 if (_movePool.Has(entity))
                 {
@@ -105,7 +105,7 @@ namespace ProtoGame
         {
 
         
-            foreach (var entity in _playerFilder)
+            foreach (var entity in _playerFilter)
             {
                 if (_speedPool.Has(entity))
                 {
@@ -156,7 +156,7 @@ namespace ProtoGame
         private void SetCreep(bool isCreep)
         {
 
-            foreach (var entity in _playerFilder)
+            foreach (var entity in _playerFilter)
             {
                 if (_creepPool.Has(entity))
                 {
@@ -182,7 +182,7 @@ namespace ProtoGame
 
         private void SetFire(bool isFire)
         {
-            foreach (var entity in _playerFilder)
+            foreach (var entity in _playerFilter)
             {
                 if (_fireEvent.Has(entity))
                 {

@@ -13,6 +13,7 @@ namespace ProtoGame.Game.ECS
         private EcsFilter _filterMove;
         private EcsPool<EMovePlayerObjListener> _moveListener;
         private Vector3 _direct = Vector3.zero;
+
         public void Init(IEcsSystems systems)
         {
             _filter = systems.GetWorld().Filter<EPlayerComp>().Inc<EInputMoveEvent>().End();

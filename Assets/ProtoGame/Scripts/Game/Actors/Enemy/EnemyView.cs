@@ -5,7 +5,6 @@ using Zenject;
 
 namespace ProtoGame.Game.Actor.Enemy
 {
-
     public interface IEnemy
     {
         GameObject gameObject { get; }
@@ -21,7 +20,6 @@ namespace ProtoGame.Game.Actor.Enemy
         [Inject]
         public void Initialize()
         {
-
             var es = GetComponentsInChildren<IEntitySet>();
 
             foreach (var item in es)

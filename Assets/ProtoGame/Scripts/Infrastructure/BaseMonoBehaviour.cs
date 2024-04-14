@@ -1,5 +1,4 @@
-﻿
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace ProtoGame.Game.Infrastructure
 {
@@ -7,6 +6,7 @@ namespace ProtoGame.Game.Infrastructure
     {
 
         protected bool _isSetup { get; private set; }
+
         private void Awake()
         {
             Setup();

@@ -28,7 +28,6 @@ namespace ProtoGame.Infrastructure.States
                 .Then(PrepareScene)
                 .Done(() =>
                 {
-
                     _ecsController.IsRunGame = true;
                 }, Er => { Debug.LogError(Er); });
 
@@ -48,18 +47,30 @@ namespace ProtoGame.Infrastructure.States
             return promise;
         }
 
+        private IPromise<ISceneInitManager> LoadSceneManager()
+        {
+            var promise = new Promise<ISceneInitManager>();
+
+            var sceneInitManager = Object.FindObjectOfType<SceneInitManager>().GetComponent<ISceneInitManager>();
+
+            _di.Inject(sceneInitManager);
+            sceneInitManager.Setup();
+            promise.Resolve(sceneInitManager);
+            promise.Done();
+            return promise;
+        }
+
         private IPromise PrepareScene()
         {
             var promise = new Promise();
 
-            var sceneInitManager = Object.FindObjectOfType<SceneInitManager>().GetComponent<ISceneInitManager>();
-
             promise
                 .Then(() => _coroutineRunner.WaitEndOfFrames(2))
-                .Then(() => sceneInitManager.Setup())
-                .Then(() => PreparePlayer(sceneInitManager))
-                .Then(() => PrepareEnemies(sceneInitManager))
-                .Done(() => {
+                .Then(LoadSceneManager)
+                .Then(sceneInitManager => { PreparePlayer(sceneInitManager); return sceneInitManager; })
+                .Then(sceneInitManager => PrepareEnemies(sceneInitManager))
+                .Done(() =>
+                {
                     Resources.UnloadUnusedAssets();
                 });
 
@@ -83,18 +94,18 @@ namespace ProtoGame.Infrastructure.States
                 })
                 .Then(playerInstance =>
                 {
-                    sceneInitManager.GameCameraSmooth.SetTarget(playerInstance.transform, new Vector3(-32, 25,- 32));
+                    sceneInitManager.GameCameraSmooth.SetTarget(playerInstance.transform, new Vector3(-32, 25, -32));
 
                     return playerInstance;
                 })
                 .Then(playerInstance =>
                 {
-                    int entity = _ecsWorld.NewEntity();
-                    EcsPool<EPlayerComp> pool = _ecsWorld.GetPool<EPlayerComp>();
-                    ref EPlayerComp plComp = ref pool.Add(entity);
+                    var entity = _ecsWorld.NewEntity();
+                    var pool = _ecsWorld.GetPool<EPlayerComp>();
+                    ref var plComp = ref pool.Add(entity);
                     plComp.playerView = playerInstance;
                 })
-                .Done(); 
+                .Done();
             promise.Resolve();
             return promise;
 
@@ -112,11 +123,12 @@ namespace ProtoGame.Infrastructure.States
                     foreach (var point in points)
                     {
                         var p = _customEnemyFactory.Create(point.transform);
-                        p.Then(enemy => {
+                        p.Then(enemy =>
+                        {
                         }).Done();
                     }
 
-                    
+
                 }).Done();
             promise.Resolve();
             return promise;
@@ -125,7 +137,13 @@ namespace ProtoGame.Infrastructure.States
 
         public void Exit()
         {
-            SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName(CONSTANTS.GAME_SCENE));
+            _ecsController.IsRunGame = false;
+            var ents = new int[_ecsWorld.GetEntitiesCount()];
+            _ecsWorld.GetAllEntities(ref ents);
+            for(int i = 0; i < ents.Length; i++)
+                _ecsWorld.DelEntity(ents[i]);
+
+          //  SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName(CONSTANTS.GAME_SCENE));
         }
     }
 }

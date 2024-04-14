@@ -49,6 +49,8 @@ namespace ProtoGame.Infrastructure.Installers
             gStateMachine.AddState(Container.Instantiate<LoadingGState>());
             gStateMachine.AddState(Container.Instantiate<MainMenuGState>());
             gStateMachine.AddState(Container.Instantiate<PromoMenuGState>());
+            gStateMachine.AddState(Container.Instantiate<FinishGState>());
+            
         }
 
         private void InstallContainers()
