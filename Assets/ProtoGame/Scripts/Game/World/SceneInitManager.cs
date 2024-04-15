@@ -1,4 +1,5 @@
 ﻿using Leopotam.EcsLite;
+using ProtoGame.Game.ECS;
 using ProtoGame.Game.Infrastructure;
 using System.Collections.Generic;
 using UnityEngine;
@@ -32,20 +33,28 @@ namespace ProtoGame.Game.World
 
         public SmoothCameraFollow GameCameraSmooth => _gameCameraSmooth;
 
+
         [Inject]
         private void Initialize()
         {
             _finishPoint.Initialize(_ecsWorld);
+            InitCamera();
+
         }
 
+        private void InitCamera()
+        {
+            var entity = _ecsWorld.NewEntity();
+            var pool = _ecsWorld.GetPool<EPlayerCamera>();
+            ref var comp = ref pool.Add(entity);
+            comp.gameObject = _gameCameraSmooth.gameObject;
+            comp.transform = _gameCameraSmooth.transform;
+        }
 
         protected override void SetupMB()
         {
-
             _enemySpawnersContainer.Setup();
             _playerSpawnerPoint.Setup();
-
-
         }
 
         

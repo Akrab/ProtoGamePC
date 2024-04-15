@@ -7,14 +7,14 @@ namespace ProtoGame.Game.ECS
     {
 
         private EcsFilter _filter;
-        private EcsPool<EPlayerComp> _player;
+        private EcsPool<EPlayer> _player;
         private EcsPool<EPlayerFireEvent> _firePool;
 
         public void Init(IEcsSystems systems)
         {
-            _filter = systems.GetWorld().Filter<EPlayerComp>().Inc<EPlayerFireEvent>().End();
+            _filter = systems.GetWorld().Filter<EPlayer>().Inc<EPlayerFireEvent>().End();
 
-            _player = systems.GetWorld().GetPool<EPlayerComp>();
+            _player = systems.GetWorld().GetPool<EPlayer>();
             _firePool = systems.GetWorld().GetPool<EPlayerFireEvent>();
         }
 

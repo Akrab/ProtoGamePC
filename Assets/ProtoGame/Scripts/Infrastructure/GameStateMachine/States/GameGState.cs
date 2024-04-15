@@ -1,9 +1,12 @@
+using DG.Tweening;
 using Leopotam.EcsLite;
 using ProtoGame.Game.Actor.Player;
 using ProtoGame.Game.ECS;
 using ProtoGame.Game.World;
+using ProtoGame.Infrastructure.Containers;
 using ProtoGame.Infrastructure.Controllers;
 using ProtoGame.Infrastructure.Factory;
+using ProtoGame.UI;
 using RSG;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -19,19 +22,24 @@ namespace ProtoGame.Infrastructure.States
         [Inject] private ICoroutineRunner _coroutineRunner;
         [Inject] private IEcsController _ecsController;
         [Inject] private EnemyFactory _customEnemyFactory;
-
+        [Inject] private UIContainer _uiContainer;
         public void Enter(object data = null)
         {
-            var waitPromise = new Promise();
-            waitPromise
-                .Then(LoadScene)
-                .Then(PrepareScene)
-                .Done(() =>
-                {
-                    _ecsController.IsRunGame = true;
-                }, Er => { Debug.LogError(Er); });
+            _uiContainer.GetForm<LoadingForm>().Show().OnComplete(() => {
+                var waitPromise = new Promise();
+                waitPromise
+                    .Then(LoadScene)
+                    .Then(PrepareScene)
+                    .Done(() =>
+                    {
+                        _uiContainer.GetForm<LoadingForm>().Hide();
+                        _ecsController.IsRunGame = true;
 
-            waitPromise.Resolve();
+                    }, Er => { Debug.LogError(Er); });
+
+                waitPromise.Resolve();
+            });
+
         }
 
         private IPromise LoadScene()
@@ -78,10 +86,35 @@ namespace ProtoGame.Infrastructure.States
             return promise;
         }
 
+        private IPromise SetupPlayerCamera(PlayerView playerView, ISceneInitManager sceneInitManager)
+        {
+            var promise = new Promise();
+
+            var filter = _ecsWorld.Filter<EPlayerCamera>().End();
+            var pool = _ecsWorld.GetPool<EPlayerCamera>();
+            var poolMove = _ecsWorld.GetPool<EPlayerCameraMoves>();
+
+            foreach (var entity in filter)
+            {
+                ref var plC = ref pool.Get(entity);
+                plC.offset = new Vector3(-32, 25, -32);
+                plC.currentVelocity = Vector3.zero;
+                plC.targetPostion = Vector3.zero;
+                plC.smooth = sceneInitManager.GameCameraSmooth.Smooth;
+                plC.Y_Border = sceneInitManager.GameCameraSmooth.Y_Border;
+
+                poolMove.Add(entity);
+            }
+
+            promise.Resolve();
+            return promise;
+        }
+
         private IPromise PreparePlayer(ISceneInitManager sceneInitManager)
         {
 
             var promise = new Promise();
+            
             promise
                 .Then(() => _resourseService.LoadPlayer())
                 .Then(player =>
@@ -94,19 +127,17 @@ namespace ProtoGame.Infrastructure.States
                 })
                 .Then(playerInstance =>
                 {
-                    sceneInitManager.GameCameraSmooth.SetTarget(playerInstance.transform, new Vector3(-32, 25, -32));
-
-                    return playerInstance;
-                })
-                .Then(playerInstance =>
-                {
                     var entity = _ecsWorld.NewEntity();
-                    var pool = _ecsWorld.GetPool<EPlayerComp>();
+                    var pool = _ecsWorld.GetPool<EPlayer>();
                     ref var plComp = ref pool.Add(entity);
                     plComp.playerView = playerInstance;
-                })
+                    return playerInstance;
+                }).Then(playerInstance => SetupPlayerCamera(playerInstance, sceneInitManager))
                 .Done();
+
+
             promise.Resolve();
+
             return promise;
 
         }
@@ -143,7 +174,6 @@ namespace ProtoGame.Infrastructure.States
             for(int i = 0; i < ents.Length; i++)
                 _ecsWorld.DelEntity(ents[i]);
 
-          //  SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName(CONSTANTS.GAME_SCENE));
         }
     }
 }

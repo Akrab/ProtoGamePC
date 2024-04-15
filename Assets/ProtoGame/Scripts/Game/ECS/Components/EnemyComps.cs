@@ -3,7 +3,7 @@ using ProtoGame.Game.Actor.Enemy;
 
 namespace ProtoGame.Game.ECS
 {
-    public struct EEnemyComp
+    public struct EEnemy
     {
         public EnemyView enemyView;
     }

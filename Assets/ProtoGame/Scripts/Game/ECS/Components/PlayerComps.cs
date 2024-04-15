@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ProtoGame.Game.ECS
 {
-    public struct EPlayerComp
+    public struct EPlayer
     {
         public PlayerView playerView;
         public IWeapon weapon;
@@ -44,5 +44,22 @@ namespace ProtoGame.Game.ECS
     {
         public bool isFire;
     }
+
+
+    public struct EPlayerCamera
+    {
+        public GameObject gameObject;
+        public Transform transform;
+
+        public Vector3 currentVelocity;
+        public Vector3 targetPostion;
+
+        public Vector3 offset;
+
+        public float smooth;
+        public float Y_Border;
+    }
+
+    public struct EPlayerCameraMoves { }
 
 }

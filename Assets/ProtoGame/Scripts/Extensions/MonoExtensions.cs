@@ -6,8 +6,11 @@ namespace ProtoGame.Extensions
 {
     public static class MonoExtensions
     {
-        public static IPromise WaitForEndOfFrames(this MonoBehaviour monoBehaviour, int framesCount) =>
-            WaitForFrames(monoBehaviour, framesCount);
+
+        public static IPromise WaitForEndOfFrames(this MonoBehaviour monoBehaviour, int framesCount)
+        {
+            return WaitForFrames(monoBehaviour, framesCount);
+        }
 
         private static IPromise WaitForFrames(MonoBehaviour monoBehaviour, int framesCount)
         {
@@ -23,8 +26,6 @@ namespace ProtoGame.Extensions
             yield return new WaitForEndOfFrame();
             waitPromise.Resolve();
         }
-
-
 
     }
 }

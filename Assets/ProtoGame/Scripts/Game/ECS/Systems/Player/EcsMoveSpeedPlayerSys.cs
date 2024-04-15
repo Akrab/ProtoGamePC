@@ -7,14 +7,14 @@ namespace ProtoGame.Game.ECS
     {
         private EcsFilter _filter;
         private EcsFilter _filterMove;
-        private EcsPool<EPlayerComp> _player;
+        private EcsPool<EPlayer> _player;
         private EcsPool<EInputSpeedMoveEvent> _moveSpped;
         private EcsPool<EMovePlayerObjListener> _moveListener;
         public void Init(IEcsSystems systems)
         {
-            _filter = systems.GetWorld().Filter<EPlayerComp>().Inc<EInputSpeedMoveEvent>().End();
+            _filter = systems.GetWorld().Filter<EPlayer>().Inc<EInputSpeedMoveEvent>().End();
 
-            _player = systems.GetWorld().GetPool<EPlayerComp>();
+            _player = systems.GetWorld().GetPool<EPlayer>();
             _moveSpped = systems.GetWorld().GetPool<EInputSpeedMoveEvent>();
             _filterMove = systems.GetWorld().Filter<EMovePlayerObjListener>().End();
 

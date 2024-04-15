@@ -7,7 +7,7 @@ namespace ProtoGame.Game.ECS
     public class EscMovePlayerSys : IEcsInitSystem, IEcsRunSystem
     {
         private EcsFilter _filter;
-        private EcsPool<EPlayerComp> _player;
+        private EcsPool<EPlayer> _player;
         private EcsPool<EInputMoveEvent> _move;
 
         private EcsFilter _filterMove;
@@ -16,11 +16,11 @@ namespace ProtoGame.Game.ECS
 
         public void Init(IEcsSystems systems)
         {
-            _filter = systems.GetWorld().Filter<EPlayerComp>().Inc<EInputMoveEvent>().End();
+            _filter = systems.GetWorld().Filter<EPlayer>().Inc<EInputMoveEvent>().End();
 
             _filterMove = systems.GetWorld().Filter<EMovePlayerObjListener>().End();
 
-            _player = systems.GetWorld().GetPool<EPlayerComp>();
+            _player = systems.GetWorld().GetPool<EPlayer>();
             _move = systems.GetWorld().GetPool<EInputMoveEvent>();
 
             _moveListener = systems.GetWorld().GetPool<EMovePlayerObjListener>();

@@ -26,7 +26,7 @@ namespace ProtoGame
         private Vector3 _move = Vector3.zero;
 
         private EcsFilter _playerFilter;
-        private EcsPool<EPlayerComp> _playerPool;
+        private EcsPool<EPlayer> _playerPool;
         private EcsPool<EInputMoveEvent> _movePool;
         private EcsPool<EInputCreepEvent> _creepPool;
         private EcsPool<EInputSpeedMoveEvent> _speedPool;
@@ -65,7 +65,7 @@ namespace ProtoGame
             _speedPool = _ecsWorld.GetPool<EInputSpeedMoveEvent>();
             _fireEvent = _ecsWorld.GetPool<EPlayerFireEvent>();
 
-            _playerFilter = _ecsWorld.Filter<EPlayerComp>().End();
+            _playerFilter = _ecsWorld.Filter<EPlayer>().End();
         }
 
         private void InputMove(InputAction.CallbackContext context)
