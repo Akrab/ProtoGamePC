@@ -10,7 +10,9 @@
  <li>Движение героя.</li>
  <li> Спавн Ботов.</li>
 </ul>
- 
+
+Управление клавиатурой кнопками WASD, бег - LeftShift.</br>
+</br>
 При запуске окно с кнопкой:
 ![image](https://github.com/Akrab/ProtoGamePC/assets/7695655/a6810940-1b9b-4e81-ac0a-dba3bc6e62ea)
 
