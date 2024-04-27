@@ -6,7 +6,7 @@ namespace ProtoGame.Infrastructure.States
 {
     public class MainMenuGState : IGState
     {
-        [Inject] private readonly UIContainer _uiContainer;
+        [Inject] private UIContainer _uiContainer;
         public void Enter(object data = null)
         {
             _uiContainer.GetForm<MainForm>().Show();

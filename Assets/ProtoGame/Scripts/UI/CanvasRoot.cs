@@ -8,6 +8,7 @@ namespace ProtoGame.UI
 
         public void Init()
         {
+
             Forms = GetComponentsInChildren<IForm>();
 
             foreach (var form in Forms)
